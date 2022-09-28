@@ -51,3 +51,20 @@ Filter a list using Stream       100000   179.55 µs/op
 Filter a range using Enum        100000   103.00 µs/op
 Filter a range using Stream      100000   179.51 µs/op
 ```
+
+### Logging with a generator function vs. iolist vs. binary
+
+If your data is cheap to generate, it makes roughly no difference
+whether you use a generator versus an iolist. A binary may be a tiny, tiny bit
+slower, but the actual time to write the log massively dominates those differences.
+
+```
+## Loggerbench
+benchmark name                                      iterations   average time 
+Skipping logging using a straight iolist                 50000   59.60 µs/op
+Skipping logging using an iolist message generator       50000   59.91 µs/op
+Skipping logging using a binary                          50000   60.15 µs/op
+Logging using an iolist message generator                   50   32229.96 µs/op
+Logging using a straight iolist                             50   32782.38 µs/op
+Logging using a binary                                     100   33229.38 µs/op
+```
