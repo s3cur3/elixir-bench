@@ -68,3 +68,22 @@ Logging using an iolist message generator                   50   32229.96 µs/op
 Logging using a straight iolist                             50   32782.38 µs/op
 Logging using a binary                                     100   33229.38 µs/op
 ```
+
+### Geometry coordinate rounding
+
+For large geometry collections, it looks like doing a `Float.round/2` on each
+of the coordinates has a smaller impact on the serialization time than I expected.
+(JIT FTW!)
+
+```
+## GeometryCoordinateRoundingBench
+[09:34:13] 1/2: Rounding the coordinates to 6 digits
+[09:34:16] 2/2: Serializing the geometry as-is
+
+Finished in 4.35 seconds
+
+## GeometryCoordinateRoundingBench
+benchmark name                        iterations   average time 
+Serializing the geometry as-is                 1   1434005.00 µs/op
+Rounding the coordinates to 6 digits           1   2914367.00 µs/op
+```
