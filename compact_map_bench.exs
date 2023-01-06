@@ -26,6 +26,33 @@ defmodule CompactMapBench do
     end
   end
 
+  bench ":lists.filtermap with function capture" do
+    # Do a function capture here to simulate wrapping this all in a utility function
+    func = &select_id/1
+
+    :lists.filtermap(
+      fn x ->
+        case func.(x) do
+          nil -> false
+          mapped_val -> {true, mapped_val}
+        end
+      end,
+      @values
+    )
+  end
+
+  bench ":lists.filtermap without function capture" do
+    :lists.filtermap(
+      fn x ->
+        case select_id(x) do
+          nil -> false
+          mapped_val -> {true, mapped_val}
+        end
+      end,
+      @values
+    )
+  end
+
   bench "Flat map + List.wrap" do
     Enum.flat_map(@values, &List.wrap(select_id(&1)))
   end
