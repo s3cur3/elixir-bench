@@ -18,6 +18,7 @@ defmodule ElixirStartingPoint.MixProject do
   defp deps do
     [
       {:benchfella, ">= 0.0.0"},
+      {:jason, "~> 1.0"},
       {:credo, "~> 1.6.1", only: [:dev, :test], runtime: false}
     ]
   end
