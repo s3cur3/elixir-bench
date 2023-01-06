@@ -1,0 +1,25 @@
+defmodule CompactMapBench do
+  use Benchfella
+
+  @real_values Enum.map(0..10_000, & %{id: &1})
+  @nil_values List.duplicate(%{id: nil}, 1_000)
+  @values Enum.concat(@real_values, @nil_values) |> Enum.shuffle()
+
+  bench "Map + reject" do
+    @values
+    |> Enum.map(&select_id/1)
+    |> Enum.reject(&is_nil/1)
+  end
+
+  bench "For comprehension removing nil values" do
+    for val <- @values, mapped_val = select_id(val), not is_nil(mapped_val) do
+      mapped_val
+    end
+  end
+
+  bench "Flat map + List.wrap" do
+    Enum.flat_map(@values, &List.wrap(select_id(&1)))
+  end
+
+  defp select_id(%{id: id}), do: id
+end

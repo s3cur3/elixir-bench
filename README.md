@@ -87,3 +87,25 @@ benchmark name                        iterations   average time
 Serializing the geometry as-is                 1   1434005.00 µs/op
 Rounding the coordinates to 6 digits           1   2914367.00 µs/op
 ```
+
+## Compact map (i.e., mapping over a collection, then removing nil values)
+
+This algorithm comes [from the Swift standard library](https://developer.apple.com/documentation/swift/sequence/compactmap(_:)).
+
+Interestingly, the `for` comprehension is *way* faster here.
+
+```
+## CompactMapBench
+[13:40:00] 1/3: Flat map + List.wrap
+[13:40:21] 2/3: For comprehension removing nil values
+[13:40:37] 3/3: Map + reject
+
+Finished in 58.26 seconds
+
+## CompactMapBench
+benchmark name                         iterations   average time 
+For comprehension removing nil values      100000   143.76 µs/op
+Flat map + List.wrap                        50000   343.96 µs/op
+Map + reject                                50000   347.45 µs/op
+```
+
