@@ -11,7 +11,16 @@ defmodule CompactMapBench do
     |> Enum.reject(&is_nil/1)
   end
 
-  bench "For comprehension removing nil values" do
+  bench "For comprehension removing nil values with function capture" do
+    # Do a function capture here to simulate wrapping this all in a utility function
+    func = &select_id/1
+
+    for val <- @values, mapped_val = func.(val), not is_nil(mapped_val) do
+      mapped_val
+    end
+  end
+
+  bench "For comprehension removing nil values without function capture" do
     for val <- @values, mapped_val = select_id(val), not is_nil(mapped_val) do
       mapped_val
     end
