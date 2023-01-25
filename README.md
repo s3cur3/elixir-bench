@@ -19,6 +19,19 @@ Evens using `Enum` with anonymous function                 10000   193.00 µs/op
 Evens using `Enum` with named function                     10000   194.82 µs/op
 ```
 
+### Case-insensitive string comparison
+
+`String.downcase/1` wins.
+
+```
+## CaseInsensitiveStringCompareBench
+benchmark name               iterations   average time 
+Downcase (Small, Equal)            5000   3866.55 µs/op
+Downcase (Small, Not equal)        5000   5083.07 µs/op
+Regex (Small, Not matching)        5000   6068.93 µs/op
+Regex (Small, Matching)            5000   7021.87 µs/op
+```
+
 ### Stream versus Enum
 
 This one does a *little* more than filtering (on the assumption that this isn't the final step in your pipeline... if you're considering `Stream`, you probably still have to do *something* with it at the end).
