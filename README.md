@@ -92,3 +92,24 @@ Map + reject                                                        100000   346
 :lists.filtermap without function capture                           100000   427.62 µs/op
 ```
 
+## Deduplication
+
+A test of deduplicating a large-ish list of maps (20k elements, half of which are duplicates).
+
+```
+## DeduplicationBench
+benchmark name       iterations   average time 
+MapSet                      500   3345.76 µs/op
+Enum.uniq/1                 500   3688.97 µs/op
+MapSet back to list         500   3944.85 µs/op
+```
+
+Here's the same test, but with a list of 200k elements (100k unique).
+
+```
+## DeduplicationBench
+benchmark name       iterations   average time 
+MapSet                       50   48417.30 µs/op
+MapSet back to list          50   50768.34 µs/op
+Enum.uniq/1                  50   61289.76 µs/op
+```
