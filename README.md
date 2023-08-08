@@ -94,22 +94,30 @@ Map + reject                                                        100000   346
 
 ## Deduplication
 
-A test of deduplicating a large-ish list of maps (20k elements, half of which are duplicates).
+A test of deduplicating a large-ish list of maps. The "many duplicates" cases are 20k elements, half of which are duplicates; "single duplicate" cases are 10,0001 elements, one of which is a duplicate.
 
 ```
 ## DeduplicationBench
-benchmark name       iterations   average time 
-MapSet                      500   3345.76 µs/op
-Enum.uniq/1                 500   3688.97 µs/op
-MapSet back to list         500   3944.85 µs/op
+benchmark name                          iterations   average time 
+MapSet (single duplicate)                     1000   1295.47 µs/op
+MapSet back to list (single duplicate)        1000   1551.90 µs/op
+Enum.uniq/1 (single duplicate)                1000   2953.91 µs/op
+MapSet (many duplicates)                       500   3327.55 µs/op
+Enum.uniq/1 (many duplicates)                  500   3874.74 µs/op
+MapSet back to list (many duplicates)          500   3908.37 µs/op
 ```
 
-Here's the same test, but with a list of 200k elements (100k unique).
+Here's the same test, but with a list of 200k elements (100k unique) in the "many duplicates" case and 100,001 for the single duplicate case.
 
 ```
 ## DeduplicationBench
-benchmark name       iterations   average time 
-MapSet                       50   48417.30 µs/op
-MapSet back to list          50   50768.34 µs/op
-Enum.uniq/1                  50   61289.76 µs/op
+benchmark name                          iterations   average time 
+MapSet (single duplicate)                      100   16981.94 µs/op
+MapSet back to list (single duplicate)         100   20836.07 µs/op
+MapSet (many duplicates)                        50   46885.00 µs/op
+Enum.uniq/1 (single duplicate)                  50   47161.16 µs/op
+MapSet back to list (many duplicates)           50   53378.28 µs/op
+Enum.uniq/1 (many duplicates)                   50   65725.54 µs/op
 ```
+
+My takeaway: `MapSet` excels, by more than a factor of 2, when there are few duplicates. When there are many duplicates, or when you're going to need to convert the `MapSet` back to a list anyway (as you might need in an Ecto query), the gap shrinks or is eliminated.
