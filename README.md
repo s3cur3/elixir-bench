@@ -121,3 +121,19 @@ Enum.uniq/1 (many duplicates)                   50   65725.54 µs/op
 ```
 
 My takeaway: `MapSet` excels, by more than a factor of 2, when there are few duplicates. When there are many duplicates, or when you're going to need to convert the `MapSet` back to a list anyway (as you might need in an Ecto query), the gap shrinks or is eliminated.
+
+## "Prioritization" (partitioning a list, joining the results together)
+
+This is a test of ordering an enum where the parts that match a given predicate all come before
+the parts that do not. This is similar to a C++ `std::partition()`, but without returning the partition point.
+
+The split + join version is quite a bit faster.
+
+```
+## PrioritizeBench
+benchmark name           iterations   average time 
+Split + join (shuffled)       10000   286.33 µs/op
+Split + join (ordered)        10000   286.71 µs/op
+Sort (shuffled)                5000   683.37 µs/op
+Sort (ordered)                 5000   685.87 µs/op
+```
