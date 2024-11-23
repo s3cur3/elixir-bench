@@ -75,14 +75,14 @@ Serializing the geometry as-is                 1   1434005.00 µs/op
 Rounding the coordinates to 6 digits           1   2914367.00 µs/op
 ```
 
-## Compact map (i.e., mapping over a collection, then removing nil values)
+## Map compact (i.e., mapping over a collection, then removing nil values)
 
-This algorithm comes [from the Swift standard library](https://developer.apple.com/documentation/swift/sequence/compactmap(_:)).
+This algorithm comes [from the Swift standard library](https://developer.apple.com/documentation/swift/sequence/MapCompact(_:)).
 
 Interestingly, the `for` comprehension is *way* faster here. I have no explanation for why `:lists.filtermap/2` is so much slower *without* the function capture, but I've rewritten that benchmark a half dozen different ways and keep getting the same results. 
 
 ```
-## CompactMapBench
+## MapCompactBench
 benchmark name                                                  iterations   average time 
 For comprehension removing nil values without function capture      500000   137.33 µs/op
 For comprehension removing nil values with function capture         500000   149.56 µs/op
@@ -90,6 +90,20 @@ For comprehension removing nil values with function capture         500000   149
 Flat map + List.wrap                                                100000   342.46 µs/op
 Map + reject                                                        100000   346.86 µs/op
 :lists.filtermap without function capture                           100000   427.62 µs/op
+```
+
+## Filter map (i.e., filtering a collection, then mapping the results)
+
+`:lists.filtermap` is bizarrely slow here...
+
+```
+## FilterMapBench
+benchmark name                                                  iterations   average time 
+For comprehension removing odd values without function capture      500000   54.17 µs/op
+For comprehension removing odd values with function capture         500000   54.61 µs/op
+Map + filter                                                        200000   83.09 µs/op
+:lists.filtermap without function capture                           100000   164.92 µs/op
+:lists.filtermap with function capture                              100000   166.64 µs/op
 ```
 
 ## Deduplication

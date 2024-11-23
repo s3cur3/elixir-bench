@@ -1,7 +1,7 @@
-defmodule CompactMapBench do
+defmodule MapCompactBench do
   use Benchfella
 
-  @real_values Enum.map(0..10_000, & %{id: &1})
+  @real_values Enum.map(0..10_000, &%{id: &1})
   @nil_values List.duplicate(%{id: nil}, 1_000)
   @values Enum.concat(@real_values, @nil_values) |> Enum.shuffle()
 
