@@ -24,6 +24,12 @@ defmodule FilterMapBench do
     end
   end
 
+  bench "For comprehension removing odd values with bitwise without function capture" do
+    for val <- @values, even_bitwise?(val) do
+      square(val)
+    end
+  end
+
   bench ":lists.filtermap with function capture" do
     # Simulate wrapping this all in a utility function
     mapper = fn val -> val * val end
@@ -53,6 +59,7 @@ defmodule FilterMapBench do
     )
   end
 
+  defp even_bitwise?(val), do: Bitwise.band(val, 1) == 0
   defp even?(val), do: rem(val, 2) == 0
   defp square(val), do: val * val
 end
